@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FCSpace</title>
+  </head>
+  <body>
+    <h1>Welcome {{username}}</h1>
+    <a href="/logout">Logout</a>
+    <!-- ADMIN ONLY START -->
+    <p>You are an admin!</p>
+    <!-- ADMIN ONLY END -->
+    <hr style="margin: 20px 0" />
+    <h2>Notes from all users</h2>
+    <form action="/" method="GET">
+      <h3>Search for notes</h3>
+      <input name="q" />
+      <button type="submit">Search</button>
+    </form>
+    <ul>
+      {{allNotes}}
+    </ul>
+    <h3>Add note</h3>
+    <form action="/" method="POST">
+      <input type="hidden" name="isPrivate" value="false" />
+      <input name="note" />
+      <input type="hidden" name="token" value="{{token}}" />
+      <button type="submit">Save</button>
+    </form>
+    <hr style="margin: 20px 0" />
+    <h2>Your private notes</h2>
+    <ul>
+      {{privateNotes}}
+    </ul>
+    <h3>Add private note</h3>
+    <form action="/" method="POST">
+      <input type="hidden" name="isPrivate" value="true" />
+      <input name="note" />
+      <button type="submit">Save</button>
+    </form>
+  </body>
+</html>
