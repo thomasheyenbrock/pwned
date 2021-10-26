@@ -81,10 +81,15 @@ async function getHtml(user, query) {
     }, {});
 
   if (Object.values(noteCount).some((value) => value > 100)) {
-    console.warn("High amount of notes with the same text are being posted.");
+    return "<h1>XSS Worm Alarm</h1><p>You found flag_xss_worm</p>";
   }
 
-  const filteredNotes = await filterNotes(allNotes, query);
+  let filteredNotes;
+  try {
+    filteredNotes = await filterNotes(allNotes, query);
+  } catch {
+    return "<h1>DOS Alarm</h1><p>You found flag_re_dos</p>";
+  }
 
   let html = indexTemplate
     .replace(/{{username}}/, user.username)
@@ -226,6 +231,33 @@ const client = new MongoClient(config.get("mongodb"), {
 });
 
 client.connect().then(async () => {
+  await client.db("pwned").dropDatabase();
+
+  await client
+    .db("pwned")
+    .collection("users")
+    .insertMany([
+      { username: "fc24admin", password: "fc24pwned", isAdmin: true },
+      { username: "fc24moderator", password: "iamincharge" },
+      { username: "fc24user", password: "iamnoadmin" },
+    ]);
+
+  await client
+    .db("pwned")
+    .collection("notes")
+    .insertMany([
+      {
+        username: "fc24moderator",
+        note: "Welcome to our space!",
+        isPrivate: false,
+      },
+      {
+        username: "fc24user",
+        note: "You found flag_account_hijacking",
+        isPrivate: true,
+      },
+    ]);
+
   app.listen(port, () => {
     console.log(`Start pwning at http://localhost:${port}`);
   });

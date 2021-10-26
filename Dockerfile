@@ -27,5 +27,9 @@ COPY app /usr/src/app
 RUN mkdir -p /var/log/supervisor
 COPY setup/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+RUN /bin/rm -R /bin/bash /bin/sh
+
+ENV SUPER_SECRET="You found flag_remote_code_execution"
+
 EXPOSE 3000
 CMD ["/usr/bin/supervisord"]
